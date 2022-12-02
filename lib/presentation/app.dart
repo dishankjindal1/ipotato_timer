@@ -7,7 +7,7 @@ class IPotatoTimerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRouter.splashPage,
+        initialRoute: AppRouter.homePage,
         onGenerateRoute: AppRouter.onGenerateRoute,
       );
 }
