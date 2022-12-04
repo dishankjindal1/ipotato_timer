@@ -366,7 +366,7 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                 /// Adding becuase it is already in seconds
                 totalMilliseconds += int.parse(_timerTextController[2].text);
 
-                ref.read(taskControllerProvider.notifier).setTaskEntity(
+                ref.read(taskControllerProvider.notifier).addTask(
                       title: _titleTextController.text,
                       content: _descriptionTextController.text,
 

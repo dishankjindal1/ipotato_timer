@@ -14,39 +14,51 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+TaskModel _$TaskModelFromJson(Map<String, dynamic> json) {
+  return _TaskModel.fromJson(json);
+}
+
 /// @nodoc
-mixin _$TaskEntity {
+mixin _$TaskModel {
+  String get uuid => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
 
   /// storing computed timestamp based on duration selected
   int get exitTimeStamp => throw _privateConstructorUsedError;
 
+  /// storing computed timestamp based on duration selected
+  set exitTimeStamp(int value) => throw _privateConstructorUsedError;
+
   /// storing computed timestamp based duration selected
   int? get pausedTimeStamp => throw _privateConstructorUsedError;
 
+  /// storing computed timestamp based duration selected
+  set pausedTimeStamp(int? value) => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TaskEntityCopyWith<TaskEntity> get copyWith =>
+  $TaskModelCopyWith<TaskModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TaskEntityCopyWith<$Res> {
-  factory $TaskEntityCopyWith(
-          TaskEntity value, $Res Function(TaskEntity) then) =
-      _$TaskEntityCopyWithImpl<$Res, TaskEntity>;
+abstract class $TaskModelCopyWith<$Res> {
+  factory $TaskModelCopyWith(TaskModel value, $Res Function(TaskModel) then) =
+      _$TaskModelCopyWithImpl<$Res, TaskModel>;
   @useResult
   $Res call(
-      {String title,
+      {String uuid,
+      String title,
       String? description,
       int exitTimeStamp,
       int? pausedTimeStamp});
 }
 
 /// @nodoc
-class _$TaskEntityCopyWithImpl<$Res, $Val extends TaskEntity>
-    implements $TaskEntityCopyWith<$Res> {
-  _$TaskEntityCopyWithImpl(this._value, this._then);
+class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
+    implements $TaskModelCopyWith<$Res> {
+  _$TaskModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -56,12 +68,17 @@ class _$TaskEntityCopyWithImpl<$Res, $Val extends TaskEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uuid = null,
     Object? title = null,
     Object? description = freezed,
     Object? exitTimeStamp = null,
     Object? pausedTimeStamp = freezed,
   }) {
     return _then(_value.copyWith(
+      uuid: null == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -83,37 +100,42 @@ class _$TaskEntityCopyWithImpl<$Res, $Val extends TaskEntity>
 }
 
 /// @nodoc
-abstract class _$$_TaskEntityCopyWith<$Res>
-    implements $TaskEntityCopyWith<$Res> {
-  factory _$$_TaskEntityCopyWith(
-          _$_TaskEntity value, $Res Function(_$_TaskEntity) then) =
-      __$$_TaskEntityCopyWithImpl<$Res>;
+abstract class _$$_TaskModelCopyWith<$Res> implements $TaskModelCopyWith<$Res> {
+  factory _$$_TaskModelCopyWith(
+          _$_TaskModel value, $Res Function(_$_TaskModel) then) =
+      __$$_TaskModelCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String title,
+      {String uuid,
+      String title,
       String? description,
       int exitTimeStamp,
       int? pausedTimeStamp});
 }
 
 /// @nodoc
-class __$$_TaskEntityCopyWithImpl<$Res>
-    extends _$TaskEntityCopyWithImpl<$Res, _$_TaskEntity>
-    implements _$$_TaskEntityCopyWith<$Res> {
-  __$$_TaskEntityCopyWithImpl(
-      _$_TaskEntity _value, $Res Function(_$_TaskEntity) _then)
+class __$$_TaskModelCopyWithImpl<$Res>
+    extends _$TaskModelCopyWithImpl<$Res, _$_TaskModel>
+    implements _$$_TaskModelCopyWith<$Res> {
+  __$$_TaskModelCopyWithImpl(
+      _$_TaskModel _value, $Res Function(_$_TaskModel) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uuid = null,
     Object? title = null,
     Object? description = freezed,
     Object? exitTimeStamp = null,
     Object? pausedTimeStamp = freezed,
   }) {
-    return _then(_$_TaskEntity(
+    return _then(_$_TaskModel(
+      uuid: null == uuid
+          ? _value.uuid
+          : uuid // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -135,14 +157,20 @@ class __$$_TaskEntityCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _$_TaskEntity implements _TaskEntity {
-  _$_TaskEntity(
-      {required this.title,
+@JsonSerializable()
+class _$_TaskModel implements _TaskModel {
+  _$_TaskModel(
+      {required this.uuid,
+      required this.title,
       this.description,
       required this.exitTimeStamp,
       this.pausedTimeStamp});
 
+  factory _$_TaskModel.fromJson(Map<String, dynamic> json) =>
+      _$$_TaskModelFromJson(json);
+
+  @override
+  final String uuid;
   @override
   final String title;
   @override
@@ -150,49 +178,44 @@ class _$_TaskEntity implements _TaskEntity {
 
   /// storing computed timestamp based on duration selected
   @override
-  final int exitTimeStamp;
+  int exitTimeStamp;
 
   /// storing computed timestamp based duration selected
   @override
-  final int? pausedTimeStamp;
+  int? pausedTimeStamp;
 
   @override
   String toString() {
-    return 'TaskEntity(title: $title, description: $description, exitTimeStamp: $exitTimeStamp, pausedTimeStamp: $pausedTimeStamp)';
+    return 'TaskModel(uuid: $uuid, title: $title, description: $description, exitTimeStamp: $exitTimeStamp, pausedTimeStamp: $pausedTimeStamp)';
   }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_TaskEntity &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.exitTimeStamp, exitTimeStamp) ||
-                other.exitTimeStamp == exitTimeStamp) &&
-            (identical(other.pausedTimeStamp, pausedTimeStamp) ||
-                other.pausedTimeStamp == pausedTimeStamp));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, title, description, exitTimeStamp, pausedTimeStamp);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TaskEntityCopyWith<_$_TaskEntity> get copyWith =>
-      __$$_TaskEntityCopyWithImpl<_$_TaskEntity>(this, _$identity);
+  _$$_TaskModelCopyWith<_$_TaskModel> get copyWith =>
+      __$$_TaskModelCopyWithImpl<_$_TaskModel>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TaskModelToJson(
+      this,
+    );
+  }
 }
 
-abstract class _TaskEntity implements TaskEntity {
-  factory _TaskEntity(
-      {required final String title,
+abstract class _TaskModel implements TaskModel {
+  factory _TaskModel(
+      {required final String uuid,
+      required final String title,
       final String? description,
-      required final int exitTimeStamp,
-      final int? pausedTimeStamp}) = _$_TaskEntity;
+      required int exitTimeStamp,
+      int? pausedTimeStamp}) = _$_TaskModel;
 
+  factory _TaskModel.fromJson(Map<String, dynamic> json) =
+      _$_TaskModel.fromJson;
+
+  @override
+  String get uuid;
   @override
   String get title;
   @override
@@ -201,12 +224,18 @@ abstract class _TaskEntity implements TaskEntity {
 
   /// storing computed timestamp based on duration selected
   int get exitTimeStamp;
+
+  /// storing computed timestamp based on duration selected
+  set exitTimeStamp(int value);
   @override
 
   /// storing computed timestamp based duration selected
   int? get pausedTimeStamp;
+
+  /// storing computed timestamp based duration selected
+  set pausedTimeStamp(int? value);
   @override
   @JsonKey(ignore: true)
-  _$$_TaskEntityCopyWith<_$_TaskEntity> get copyWith =>
+  _$$_TaskModelCopyWith<_$_TaskModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

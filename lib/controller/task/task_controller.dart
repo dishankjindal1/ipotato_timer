@@ -1,35 +1,89 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ipotato_timer/data_layer/data_layer_imports.dart';
+import 'package:uuid/uuid.dart';
 
-final taskControllerProvider =
-    ChangeNotifierProvider<TaskController>((ref) => TaskController());
+final taskControllerProvider = ChangeNotifierProvider<TaskController>(
+  (ref) => TaskController(
+    database: MyDatabase(),
+  ),
+);
 
 class TaskController extends ChangeNotifier {
+  TaskController({required MyDatabase database}) {
+    _database = database;
+    _watchForChangesInTaskTable();
+    _database.select(_database.tasks).get().then((values) {
+      for (var a in values) {
+        var entity = TaskEntity(
+          uuidE: a.uuid,
+          titleE: a.title,
+          descriptionE: a.description,
+          exitTimeStampE: a.exitTimeStamp,
+          pausedTimeStampE: a.pausedTimeStamp,
+        );
+
+        listOfTask.add(entity);
+        notifyListeners();
+      }
+    });
+  }
+
+  late MyDatabase _database;
   late final Timer timerPeriodic;
 
   DateTime currentDayTimeStamp = DateTime.now();
 
   List<TaskEntity> listOfTask = [];
+  void _addToListOfTask(TaskEntity e) {
+    listOfTask.add(e);
+    notifyListeners();
+  }
 
-  void setTaskEntity(
+  void _watchForChangesInTaskTable() async {
+    var taskStream = (_database.select(_database.tasks)
+          ..limit(1)
+          ..orderBy([(u) => OrderingTerm.asc(u.createdAt)]))
+        .watchSingle();
+
+    await for (var a in taskStream) {
+      var entity = TaskEntity(
+        uuidE: a.uuid,
+        titleE: a.title,
+        descriptionE: a.description,
+        exitTimeStampE: a.exitTimeStamp,
+        pausedTimeStampE: a.pausedTimeStamp,
+      );
+
+      _addToListOfTask(entity);
+    }
+  }
+
+  void addTask(
       {required String title,
       String? content,
       required int totalMilliseconds}) {
     var taskEnitity = TaskEntity(
-      title: title,
-      description: content,
-      exitTimeStamp: _computedExitTimeStamp(totalMilliseconds),
+      uuidE: Uuid().v4(),
+      titleE: title,
+      descriptionE: content,
+      exitTimeStampE: _computedExitTimeStamp(totalMilliseconds),
     );
 
-    listOfTask.add(taskEnitity);
-
-    notifyListeners();
+    _insertTaskDB(taskEnitity);
   }
 
-  void setPauseTimeStamp(int index) {
+  int _computedExitTimeStamp(int milliseconds) {
+    /// We safely Assume the time user press the add task button
+    /// in the ui the logic will run at the same time
+    var date = DateTime.now().add(Duration(milliseconds: milliseconds));
+    return date.millisecondsSinceEpoch;
+  }
+
+  void togglePause(int index) {
     if (listOfTask.isEmpty) return;
 
     if (listOfTask[index].pausedTimeStamp != null) {
@@ -47,28 +101,69 @@ class TaskController extends ChangeNotifier {
         exitTimeStamp: addDifferenceToExitTimeStamp.millisecondsSinceEpoch,
         pausedTimeStamp: null,
       );
-      listOfTask[index] = entity;
+
+      listOfTask[index] = TaskEntity(
+        uuidE: entity.uuid,
+        titleE: entity.title,
+        descriptionE: entity.description,
+        exitTimeStampE: entity.exitTimeStamp,
+        pausedTimeStampE: entity.pausedTimeStamp,
+      );
+      _insertTaskDB(listOfTask[index], update: true);
     } else {
       var entity = listOfTask[index].copyWith(
         pausedTimeStamp: DateTime.now().millisecondsSinceEpoch,
       );
-      listOfTask[index] = entity;
+      listOfTask[index] = TaskEntity(
+        uuidE: entity.uuid,
+        titleE: entity.title,
+        descriptionE: entity.description,
+        exitTimeStampE: entity.exitTimeStamp,
+        pausedTimeStampE: entity.pausedTimeStamp,
+      );
+      _insertTaskDB(listOfTask[index], update: true);
     }
 
     notifyListeners();
   }
 
-  void remove(int index) {
-    listOfTask.removeAt(index);
+  Future<void> _insertTaskDB(TaskEntity task, {bool update = false}) async {
+    if (update) {
+      var a = _database.update(_database.tasks)
+        ..where((tbl) => tbl.uuid.equals(task.uuidE));
+      await a.write(
+        TasksCompanion(
+          exitTimeStamp: Value(task.exitTimeStampE),
+          pausedTimeStamp: task.pausedTimeStampE != null
+              ? Value(task.pausedTimeStampE!)
+              : const Value.absent(),
+        ),
+      );
+    } else {
+      await _database.into(_database.tasks).insert(
+            Task(
+              uuid: task.uuidE,
+              title: task.titleE,
+              description: task.descriptionE,
+              exitTimeStamp: task.exitTimeStampE,
+              pausedTimeStamp: task.pausedTimeStampE,
+            ),
+          );
+    }
+  }
+
+  void removeTask(int index) {
+    var a = listOfTask.removeAt(index);
+
+    _deleteTaskDB(a.uuidE);
 
     notifyListeners();
   }
 
-  int _computedExitTimeStamp(int milliseconds) {
-    /// We safely Assume the time user press the add task button
-    /// in the ui the logic will run at the same time
-    var date = DateTime.now().add(Duration(milliseconds: milliseconds));
-    return date.millisecondsSinceEpoch;
+  Future<void> _deleteTaskDB(String uuid) async {
+    var a = _database.delete(_database.tasks);
+    a.where((tbl) => tbl.uuid.equals(uuid));
+    await a.go();
   }
 
   @override
