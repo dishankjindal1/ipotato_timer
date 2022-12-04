@@ -28,8 +28,8 @@ class TimerInteractiveCard extends ConsumerWidget {
       var a = DateTime.fromMillisecondsSinceEpoch(exitTimeStamp);
       var b =
           a.difference(DateTime.fromMillisecondsSinceEpoch(pausedTimeStamp!));
-      
-      /// Storing the values in seconds because in parser we are 
+
+      /// Storing the values in seconds because in parser we are
       exitTimeStamp = b.inSeconds;
     } else {
       var a = DateTime.fromMillisecondsSinceEpoch(exitTimeStamp);
@@ -95,7 +95,7 @@ class TimerInteractiveCard extends ConsumerWidget {
                           IconButton(
                             onPressed: () => ref
                                 .read(taskControllerProvider)
-                                .setPauseTimeStamp(taskIndex),
+                                .togglePause(taskIndex),
                             icon: Card(
                               color: const Color(0xFF5B5B7D),
                               child: Padding(
@@ -113,7 +113,7 @@ class TimerInteractiveCard extends ConsumerWidget {
                           IconButton(
                             onPressed: () => ref
                                 .read(taskControllerProvider)
-                                .remove(taskIndex),
+                                .removeTask(taskIndex),
                             icon: Card(
                               color: const Color(0xFF5B5B7D),
                               child: Padding(
@@ -166,7 +166,7 @@ class TimerInteractiveCard extends ConsumerWidget {
                         onPressed: () {
                           ref
                               .read(taskControllerProvider.notifier)
-                              .remove(taskIndex);
+                              .removeTask(taskIndex);
                         },
                         child: Text(
                           'Mark Complete',
