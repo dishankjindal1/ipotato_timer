@@ -10,9 +10,11 @@ class PixelScale {
 
   static void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
+
     height = _mediaQueryData.size.height / 100;
     width = _mediaQueryData.size.width / 100;
-    text = 25 / _mediaQueryData.devicePixelRatio;
+    
+    text = _mediaQueryData.devicePixelRatio;
   }
 }
 

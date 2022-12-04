@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ipotato_timer/presentation/pages/add_timer/add_timer_page.dart';
+import 'package:ipotato_timer/presentation/pages/add_task/add_task_page.dart';
 import 'package:ipotato_timer/presentation/pages/home/home_page.dart';
 import 'package:ipotato_timer/presentation/pages/splash/splash_page.dart';
 
@@ -15,7 +15,7 @@ class AppRouter {
       case homePage:
         return MaterialPageRoute(builder: (contetx) => const HomePage());
       case addTimer:
-        return MaterialPageRoute(builder: (contetx) => const AddTimerPage());
+        return MaterialPageRoute(builder: (contetx) => const AddTaskPage());
       default:
         return MaterialPageRoute(builder: (contetx) => const HomePage());
     }

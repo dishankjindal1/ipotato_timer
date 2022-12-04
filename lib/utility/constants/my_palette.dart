@@ -7,6 +7,7 @@ class MyPalette {
   static const onPrimaryContainerLight = Color(0xFFFFFFFF);
   static const secondaryLight = Color(0xFF216C2E);
   static const secondaryContainerLight = Color(0xFFA7F5A7);
+  static const onSecondaryLight = Color(0xFFFFFFFF);
   static const tertiaryLight = Color(0xFF5B5B7D);
   static const tertiaryContainerLight = Color(0xFFE1DFFF);
   static const onTertiaryContainerLight = Color(0xFF181837);

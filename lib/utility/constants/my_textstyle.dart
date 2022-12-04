@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ipotato_timer/utility/utility_imports.dart';
 
 /// Text Styles picked up from figma file
 ///
@@ -7,74 +8,83 @@ import 'package:flutter/material.dart';
 class MyTextStyles {
   /// ----------------- Body Text Style Vairants ------------------ ///
 
-  static const TextStyle smallBodyTS = TextStyle(
-    fontSize: 12.0,
-    height: 16.0,
+  static TextStyle smallBodyTS = TextStyle(
+    fontSize: 4.ws(),
+    // fontSize: 12.0,
+    // height: 16.0,
     letterSpacing: 0.4,
   );
 
-  static const TextStyle mediumBodyTS = TextStyle(
-    fontSize: 14.0,
-    height: 20.0,
+  static TextStyle mediumBodyTS = TextStyle(
+    fontSize: 4.5.ws(),
+    // fontSize: 14.0,
+    // height: 20.0,
     letterSpacing: 0.25,
   );
 
-  static const TextStyle largeBodyTS = TextStyle(
-    fontSize: 16.0,
-    height: 24.0,
+  static TextStyle largeBodyTS = TextStyle(
+    fontSize: 5.ws(),
+    // fontSize: 16.0,
+    // height: 24.0,
     letterSpacing: 0.5,
   );
 
   /// ----------------- Headline Text Style Vairants ------------------ ///
 
-  static const TextStyle smallHeadlineTS = TextStyle(
-    fontSize: 24.0,
-    height: 32.0,
+  static TextStyle smallHeadlineTS = TextStyle(
+    fontSize: 6.ws(),
+    // fontSize: 24.0,
+    // height: 32.0,
   );
 
-  static const TextStyle mediumHeadlineTS = TextStyle(
-    fontSize: 28.0,
-    height: 36.0,
+  static TextStyle mediumHeadlineTS = TextStyle(
+    fontSize: 7.ws(),
+    // fontSize: 28.0,
+    // height: 36.0,
   );
 
-  static const TextStyle largeHeadlineTS = TextStyle(
-    fontSize: 32.0,
-    height: 40.0,
+  static TextStyle largeHeadlineTS = TextStyle(
+    fontSize: 8.ws(),
+    // fontSize: 32.0,
+    // height: 40.0,
   );
 
   /// ----------------- Title Text Style Vairants ------------------ ///
-  static const TextStyle smallTitleTS = TextStyle(
-    fontSize: 14.0,
-    height: 20.0,
-    letterSpacing: 0.1,
+  static TextStyle smallTitleTS = TextStyle(
+    fontSize: 3.5.ws(),
+
+    // fontSize: 14.0,
+    // height: 20.0,
+    // letterSpacing: 0.1,
   );
 
-  static const TextStyle mediumTitleTS = TextStyle(
-    fontSize: 16.0,
-    height: 24.0,
-    letterSpacing: 0.1,
+  static TextStyle mediumTitleTS = TextStyle(
+    fontSize: 6.ws(),
+    // height: 24.0,
+    // letterSpacing: 0.1,
   );
 
-  static const TextStyle largeTitleTS = TextStyle(
-    fontSize: 22.0,
-    height: 28.0,
+  static TextStyle largeTitleTS = TextStyle(
+    fontSize: 7.ws(),
+    // height: 28.0,
   );
 
   /// ----------------- Label Text Style Vairants ------------------ ///
-  static const TextStyle smallLabelTS = TextStyle(
-    fontSize: 14.0,
-    height: 20.0,
-    letterSpacing: 0.1,
+  static TextStyle smallLabelTS = TextStyle(
+    fontSize: 5.ws(),
+    // height: 20.0,
+    // letterSpacing: 0.1,
   );
 
-  static const TextStyle mediumLabelTS = TextStyle(
-    fontSize: 16.0,
-    height: 24.0,
-    letterSpacing: 0.1,
+  static TextStyle mediumLabelTS = TextStyle(
+    fontSize: 6.ws(),
+    // height: 24.0,
+    // letterSpacing: 0.1,
   );
 
-  static const TextStyle largeLabelTS = TextStyle(
-    fontSize: 22.0,
-    height: 28.0,
+  static TextStyle largeLabelTS = TextStyle(
+    fontSize: 5.5.ws(), fontWeight: FontWeight.w500,
+    // fontSize: 22.0,
+    // height: 28.0,
   );
 }

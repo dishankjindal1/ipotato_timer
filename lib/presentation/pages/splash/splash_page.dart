@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ipotato_timer/presentation/presentation_imports.dart';
 import 'package:ipotato_timer/utility/utility_imports.dart';
@@ -10,12 +12,12 @@ class SplashPage extends StatelessWidget {
     /// Handle different screen sizes
     PixelScale.init(context);
 
-    // Timer.periodic(const Duration(seconds: 2), (timer) {
-    //   Navigator.of(context).pushReplacementNamed(
-    //     AppRouter.homePage,
-    //   );
-    //   timer.cancel();
-    // });
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      Navigator.of(context).pushReplacementNamed(
+        AppRouter.homePage,
+      );
+      timer.cancel();
+    });
 
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -30,7 +32,7 @@ class SplashPage extends StatelessWidget {
               width: 60.ws(),
               fit: BoxFit.fitWidth,
             ),
-            ...List<Widget>.generate(10, (_) => const MySpacer()),
+            ...List<Widget>.generate(10, (_) => const AppSpacer()),
             Image.asset(
               MyAssets.logoText,
               width: 60.ws(),
