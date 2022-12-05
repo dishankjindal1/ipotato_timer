@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ipotato_timer/controller/controller_imports.dart';
 import 'package:ipotato_timer/presentation/presentation_imports.dart';
 import 'package:ipotato_timer/utility/utility_imports.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
   const AddTaskPage({super.key});
@@ -19,11 +19,12 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
   late final TextEditingController _descriptionTextController;
   late final FocusNode _descriptionFocuNode;
 
-  late final List<TextEditingController> _timerTextController;
+  late final List<RegExp> _listOfRegExp;
+  late final List<MaskTextInputFormatter> _maskTimerTextController;
 
   late final List<FocusNode> _timerFocusNode;
 
-  late bool isTitleInputActive = false;
+  late bool isTitleInputActive;
 
   @override
   void initState() {
@@ -33,10 +34,23 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
     _descriptionTextController = TextEditingController();
     _descriptionFocuNode = FocusNode();
 
-    _timerTextController = List.generate(3, (_) => TextEditingController());
+    _listOfRegExp = [
+      RegExp(r'^0*(?:[0-2][0-9]?|24)$'),
+      RegExp(r'^0*(?:[0-6][0-9]?|60)$'),
+    ];
+
+    _maskTimerTextController = List.generate(
+        3,
+        (i) => MaskTextInputFormatter(
+              mask: '00',
+              filter:
+                  i == 0 ? {'0': _listOfRegExp[0]} : {'0': _listOfRegExp[1]},
+            ));
+
     _timerFocusNode = List.generate(3, (_) => FocusNode());
+
+    isTitleInputActive = false;
     super.initState();
-    // PixelScale.init(context);
   }
 
   @override
@@ -46,10 +60,6 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
 
     _descriptionTextController.dispose();
     _descriptionFocuNode.dispose();
-
-    for (var element in _timerTextController) {
-      element.dispose();
-    }
 
     for (var element in _timerFocusNode) {
       element.dispose();
@@ -186,21 +196,18 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                       color: MyPalette.secondaryContainerLight,
                                       child: TextFormField(
                                         key: const Key('otp 1'),
-                                        controller: _timerTextController[0],
                                         focusNode: _timerFocusNode[0],
                                         keyboardType: TextInputType.datetime,
                                         scrollPadding: EdgeInsets.all(5.ws()),
-                                        style: MyTextStyles.smallBodyTS,
+                                        style: MyTextStyles.mediumBodyTS,
+                                        textAlign: TextAlign.right,
                                         inputFormatters: [
-                                          LengthLimitingTextInputFormatter(2),
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'^0*(?:[0-2][0-9]?|24)$'))
+                                          _maskTimerTextController[0]
                                         ],
-                                        decoration: const InputDecoration(
-                                          hintText: 'HH',
-                                          border: OutlineInputBorder(
+                                        decoration: InputDecoration(
+                                          hintText: _maskTimerTextController[2]
+                                              .getMask(),
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide.none,
                                           ),
                                         ),
@@ -209,7 +216,6 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                             _timerFocusNode[1].requestFocus();
                                           } else if (value.isEmpty) {
                                             _timerFocusNode[0].unfocus();
-                                            _timerTextController[0].clear();
                                           }
                                         },
                                       ),
@@ -245,21 +251,18 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                       color: MyPalette.secondaryContainerLight,
                                       child: TextFormField(
                                         key: const Key('otp 2'),
-                                        controller: _timerTextController[1],
                                         focusNode: _timerFocusNode[1],
                                         keyboardType: TextInputType.datetime,
                                         scrollPadding: EdgeInsets.all(5.ws()),
-                                        style: MyTextStyles.smallBodyTS,
+                                        style: MyTextStyles.mediumBodyTS,
+                                        textAlign: TextAlign.right,
                                         inputFormatters: [
-                                          LengthLimitingTextInputFormatter(2),
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'^0*(?:[0-6][0-6]?|60)$'))
+                                          _maskTimerTextController[1]
                                         ],
-                                        decoration: const InputDecoration(
-                                          hintText: 'MM',
-                                          border: OutlineInputBorder(
+                                        decoration: InputDecoration(
+                                          hintText: _maskTimerTextController[2]
+                                              .getMask(),
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide.none,
                                           ),
                                         ),
@@ -269,7 +272,6 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                           } else if (value.isEmpty) {
                                             _timerFocusNode[1].unfocus();
                                             _timerFocusNode[0].requestFocus();
-                                            _timerTextController[1].clear();
                                           }
                                         },
                                       ),
@@ -305,21 +307,18 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                       color: MyPalette.secondaryContainerLight,
                                       child: TextFormField(
                                         key: const Key('otp 3'),
-                                        controller: _timerTextController[2],
                                         focusNode: _timerFocusNode[2],
                                         keyboardType: TextInputType.datetime,
-                                        style: MyTextStyles.smallBodyTS,
+                                        style: MyTextStyles.mediumBodyTS,
+                                        textAlign: TextAlign.right,
                                         inputFormatters: [
-                                          LengthLimitingTextInputFormatter(2),
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'^0*(?:[0-6][0-6]?|60)$'))
+                                          _maskTimerTextController[2]
                                         ],
                                         scrollPadding: EdgeInsets.all(5.ws()),
-                                        decoration: const InputDecoration(
-                                          hintText: 'SS',
-                                          border: OutlineInputBorder(
+                                        decoration: InputDecoration(
+                                          hintText: _maskTimerTextController[2]
+                                              .getMask(),
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide.none,
                                           ),
                                         ),
@@ -329,7 +328,6 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                                           } else if (value.isEmpty) {
                                             _timerFocusNode[2].unfocus();
                                             _timerFocusNode[1].requestFocus();
-                                            _timerTextController[2].clear();
                                           }
                                         },
                                       ),
@@ -356,15 +354,22 @@ class _AddTimerPageState extends ConsumerState<AddTaskPage> {
                 var totalMilliseconds = 0;
 
                 /// converting Hours to seconds, then adding
-                totalMilliseconds +=
-                    int.parse(_timerTextController[0].text) * 60 * 60;
+                totalMilliseconds += int.parse(_maskTimerTextController[0]
+                        .getUnmaskedText()
+                        .padLeft(2, '0')) *
+                    60 *
+                    60;
 
                 /// Converting Minutes to seconds, then adding
-                totalMilliseconds +=
-                    int.parse(_timerTextController[1].text) * 60;
+                totalMilliseconds += int.parse(_maskTimerTextController[1]
+                        .getUnmaskedText()
+                        .padLeft(2, '0')) *
+                    60;
 
                 /// Adding becuase it is already in seconds
-                totalMilliseconds += int.parse(_timerTextController[2].text);
+                totalMilliseconds += int.parse(_maskTimerTextController[2]
+                    .getUnmaskedText()
+                    .padLeft(2, '0'));
 
                 ref.read(taskControllerProvider.notifier).addTask(
                       title: _titleTextController.text,
