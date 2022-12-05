@@ -15,7 +15,6 @@ final taskControllerProvider = ChangeNotifierProvider<TaskController>(
 class TaskController extends ChangeNotifier {
   TaskController({required MyDatabase database}) {
     _database = database;
-    _watchForChangesInTaskTable();
     _database.select(_database.tasks).get().then((values) {
       for (var a in values) {
         var entity = TaskEntity(
@@ -43,25 +42,6 @@ class TaskController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _watchForChangesInTaskTable() async {
-    var taskStream = (_database.select(_database.tasks)
-          ..limit(1)
-          ..orderBy([(u) => OrderingTerm.asc(u.createdAt)]))
-        .watchSingle();
-
-    await for (var a in taskStream) {
-      var entity = TaskEntity(
-        uuidE: a.uuid,
-        titleE: a.title,
-        descriptionE: a.description,
-        exitTimeStampE: a.exitTimeStamp,
-        pausedTimeStampE: a.pausedTimeStamp,
-      );
-
-      _addToListOfTask(entity);
-    }
-  }
-
   void addTask(
       {required String title,
       String? content,
@@ -83,7 +63,7 @@ class TaskController extends ChangeNotifier {
     return date.millisecondsSinceEpoch;
   }
 
-  void togglePause(int index) {
+  void togglePause(int index) async {
     if (listOfTask.isEmpty) return;
 
     if (listOfTask[index].pausedTimeStamp != null) {
@@ -109,7 +89,8 @@ class TaskController extends ChangeNotifier {
         exitTimeStampE: entity.exitTimeStamp,
         pausedTimeStampE: entity.pausedTimeStamp,
       );
-      _insertTaskDB(listOfTask[index], update: true);
+
+      await _insertTaskDB(listOfTask[index], update: true);
     } else {
       var entity = listOfTask[index].copyWith(
         pausedTimeStamp: DateTime.now().millisecondsSinceEpoch,
@@ -121,7 +102,8 @@ class TaskController extends ChangeNotifier {
         exitTimeStampE: entity.exitTimeStamp,
         pausedTimeStampE: entity.pausedTimeStamp,
       );
-      _insertTaskDB(listOfTask[index], update: true);
+
+      await _insertTaskDB(listOfTask[index], update: true);
     }
 
     notifyListeners();
@@ -149,6 +131,7 @@ class TaskController extends ChangeNotifier {
               pausedTimeStamp: task.pausedTimeStampE,
             ),
           );
+      _addToListOfTask(task);
     }
   }
 

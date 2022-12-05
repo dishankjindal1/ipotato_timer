@@ -1,3 +1,5 @@
+// ignore_for_file: sort_constructors_first
+
 import 'package:drift/drift.dart' as drift;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
